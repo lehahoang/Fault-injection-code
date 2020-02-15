@@ -1,3 +1,4 @@
 # Fault-injection-code
-This repository contains Python scripts to inject faults into parameters of a Deep learning model offline.
-Notely saying that the data type of the Deep learning model is either half-single precision or single precision
+This repository contains Python scripts to perform bit-level fault injection into weights of a Deep learning model.
+- Static process
+- Number format is single precision and (Un)signed Integer
