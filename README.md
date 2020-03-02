@@ -28,9 +28,7 @@ Fault models:
 - Stuck-at-faults (coming soon)
 
 Recommended fault ranges for experiments:
-
-Comming soon
+- Comming soon
 
 Quick tutorial to use this simulator:
-
-Coming soon
+- Coming soon
