@@ -6,6 +6,7 @@ The main functions of the simulator:
 - Evaluating the resilience of the network in faulty environment
 
 Dataset used in the project:
+- MNIST
 - CIFAR-10
 - CIFAR-100
 
@@ -24,5 +25,5 @@ Fault models:
 - Random bit-flips
 - Stuck-at-faults (coming soon)
 
-Quick tutorial to use this simulator
+Quick tutorial to use this simulator:
 Coming soon
