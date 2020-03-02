@@ -16,6 +16,7 @@ DNN models used in the project:
 - GoogleNet
 - VGG-16 (comming soon)
 - MobileNet (comming soon)
+
 I declare that I do not own the copyright of the source code of implementing DNN models. They were taken from other github repositories.  
 
 Data representation used in the project:
