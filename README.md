@@ -5,6 +5,12 @@ The main functions of the simulator:
 - Injecting bit flips at memory blocks storing DNNs' parameters
 - Evaluating the resilience of the network in faulty environment
 
+Output of the fault injection simulation:
+- Accuracy curve over the defined range of fault rates in .csv file 
+- Summary of the stats regarding the locations which are injected, e.g, e7 or sign bit of the number.
+- A '.png' file showing the accuracy curve (optinal)
+
+
 Dataset used in the project:
 - MNIST
 - CIFAR-10
