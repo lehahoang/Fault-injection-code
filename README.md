@@ -27,5 +27,9 @@ Fault models:
 - Random bit-flips
 - Stuck-at-faults (coming soon)
 
+* Recommended fault ranges for experiments:
+Comming soon
+
 Quick tutorial to use this simulator:
+
 Coming soon
