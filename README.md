@@ -1,4 +1,4 @@
-This repository contains the Python source code for the finished project. It was developed on top of Pytorch framework.
+This repository contains the Python source code for project "DNN Fault injection". It was developed on top of Pytorch framework.
 The main functions of the simulator:
 - Training Deep Neural Network (DNN) models
 - Doing image classification on the test set
