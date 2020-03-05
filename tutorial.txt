@@ -1,5 +1,5 @@
 The flow of injecting bit flips is the following.
-Module faultInjection:
+==== Module faultInjection ====
 Input: A 1D numpy array with size N, fault rate FR
 Output: A mutated 1D numpy array
 Data number format: single precision
@@ -23,7 +23,7 @@ bit_location_flipped = remainder of (bit_position/32)
 
 7. Pass the element to be mutated and its corresponding bit_location_flipped to "bitFlip" module:
 
-Module bitFlip
+==== Module bitFlip ====
 Input: bit_location_flipped; element of list_value
 Output: mutated element of list_value
 
