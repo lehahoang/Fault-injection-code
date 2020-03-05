@@ -1,0 +1,39 @@
+The flow of injecting bit flips is the following.
+Module faultInjection:
+Input: A 1D numpy array with size N, fault rate FR
+Output: A mutated 1D numpy array
+Data number format: single precision
+
+1. Set the seed for random function to assure the reproducibility
+
+2. Calcuate the total number of bits used to represent the Input array:
+total_bits = N x 32
+
+3. Calculate the number of faulty bits:
+total_faulty_bits = N x 32 x FR
+
+4. Randomly generate a list of total_faulty_bits of integer values from 0 to total_bits
+bit_position = random.integer([0, total_bits], total_faulty_bits)
+
+5. Calculate the index of mutated value in N values of input array then put them into a list:
+list_value = roundup number of (bit_position/32 )
+
+6. Walk through all elements of the list_value and calcuate the bit locations to be flipped for each element:
+bit_location_flipped = remainder of (bit_position/32)
+
+7. Pass the element to be mutated and its corresponding bit_location_flipped to "bitFlip" module:
+
+Module bitFlip
+Input: bit_location_flipped; element of list_value
+Output: mutated element of list_value
+
+1. Transform floating-point element into the binary representation. For instance, 10 in decimal representation - > ..0001010
+2. Flip the bit from 0 to 1 or 1 to 0 at the location specified by bit_location_flipped.
+If condition can be used. But better to perform xor opration with 1 at that location.
+
+
+
+
+
+
+
