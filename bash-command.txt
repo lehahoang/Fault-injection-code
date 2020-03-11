@@ -1,0 +1,13 @@
+We show example of invoking simple processes, e.g., fault injection, on LeNet-5. We could apply the same bash commands to DNN models.
+
+*Training a model:
+python main.py --net lenet5 --train --epochs 30 --split-fraction 0.1
+
+*Evaluating on the test set:
+python main.py --net lenet5 --test --show-info
+
+*Injecting faults into the whole network:
+python main.py --net lenet5 --network-injection --fault-rate 1e-4 --show-info
+
+*Layer-wise fault injection:
+python main.py --net lenet5 --layer-wise-injection conv1.weight --fault-rate 1e-3 --show-info
