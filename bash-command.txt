@@ -1,4 +1,4 @@
-We show example of invoking simple processes, e.g., fault injection, on LeNet-5. We could apply the same bash commands to DNN models.
+We show example of invoking simple processes, e.g., fault injection, on the LeNet-5 model. We could apply the same bash commands to DNN models.
 
 *Training a model:
 python main.py --net lenet5 --train --epochs 30 --split-fraction 0.1
