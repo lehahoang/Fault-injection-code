@@ -1,4 +1,5 @@
-The flow of injecting bit flips is the following.
+In this project, we assume that all physical phenomena like aging, soft error, retention failure, and so forth in memory blocks would manifest as bit flips in memory cells. Toward this end, we aim to simulate the effect of bit flips at memory blocks storing the DNNs parameters. The flow of injecting bit flips can be described shortly as follows.
+
 ==== Module faultInjection ====
 Input: A 1D numpy array with size N, fault rate FR
 Output: A mutated 1D numpy array
