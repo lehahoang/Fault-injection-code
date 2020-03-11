@@ -16,20 +16,24 @@ total_faulty_bits = N x 32 x FR
 bit_position = random.integer([0, total_bits], total_faulty_bits)
 
 5. Calculate the index of mutated value in N values of input array then put them into a list:
-list_value = roundup number of (bit_position/32 )
+index = roundup number of (bit_position/32 )
 
 6. Walk through all elements of the list_value and calcuate the bit locations to be flipped for each element:
 bit_location_flipped = remainder of (bit_position/32)
 
 7. Pass the element to be mutated and its corresponding bit_location_flipped to "bitFlip" module:
 
+==== END of Module faultInjection ====
+
 ==== Module bitFlip ====
-Input: bit_location_flipped; element of list_value
+Input: bit_location_flipped; Input[Index]
 Output: mutated element of list_value
 
-1. Transform floating-point element into the binary representation. For instance, 10 in decimal representation - > ..0001010
+1. Transform Input[Index], from floating point number, into the binary representation. For instance, 10 in decimal representation - > ..0001010
 2. Flip the bit from 0 to 1 or 1 to 0 at the location specified by bit_location_flipped.
-If condition can be used. But better to perform xor opration with 1 at that location.
+
+==== END of Module bitFlip ====
+
 
 
 
