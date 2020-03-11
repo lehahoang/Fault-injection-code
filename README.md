@@ -38,3 +38,8 @@ Recommended fault ranges for experiments:
 
 Quick tutorial to use this simulator:
 - Coming soon
+
+TO_DO:
+1. Complete the source code of running training phase
+
+2. Write the tutorial in detail
