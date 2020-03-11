@@ -36,8 +36,6 @@ Fault models:
 Recommended fault ranges for experiments:
 - Comming soon
 
-Quick tutorial to use this simulator:
-- Coming soon
 
 TO_DO:
 1. Complete the source code of running training phase
