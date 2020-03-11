@@ -1,4 +1,5 @@
-# Returning the train set and test set MNIST, CIFAR10, CIFAR100
+# Returning the train set, validation set and test set of the MNIST, CIFAR10, CIFAR100 dataset
+# This is under test
 import torch
 from torchvision import datasets, transforms
 from torch import utils
