@@ -1,53 +1,9 @@
-from __future__ import print_function
 import argparse
 import torch
-import torch.optim as optim
 import os
-from torchvision import datasets, transforms
 from torchsummary import summary
-from dataset.dataloader import mnist_loader
-from dataset.dataloader import cifar10_loader
-from dataset.dataloader import cifar100_loader
-from dl_models.lenet5 import lenet5
-from dl_models.alexnet import alexnet
-from dl_models.googlenet import googlenet
-from faultInjection import layer, randNetwork
-from phase import train,test,val
+from modules import *
 
-model_class_map = {
-                   'lenet5'          : lenet5(),
-                   'alexnet'         : alexnet(),
-                   'googlenet'       : googlenet()
-                  }
-dataset_class_map={
-                   'lenet5'          : mnist_loader,
-                   'alexnet'         : cifar10_loader,
-                   'googlenet'       : cifar100_loader
-                  }
-def prepare_model(args):
-    '''
-        Preparing the model
-    '''
-    use_cuda = torch.cuda.is_available()
-    torch.manual_seed(args.seed)
-    device = torch.device("cuda" if use_cuda else "cpu")
-    model = model_class_map[args.net].to(device)
-    weight_file=args.load_from
-    train_, val_, test_= dataset_class_map[args.net](args, args.train_batch_size, args.test_batch_size)
-    return model, train_, val_, test_, device, weight_file
-
-def show_info(weight_file, model):
-    '''
-        Showing the required info:
-        -- DNN models in detail
-        -- Name of the layers
-    '''
-    print(" =================== NETWORK INFO ========================")
-    model_params = torch.load(weight_file, map_location='cpu')
-    layers_name=list(model_params.keys())
-    print(model,'\n')
-    print('Name of the layers:', layers_name)
-    print('===========================================================')
 
 def main():
     print("|| Loading.....")
@@ -72,7 +28,7 @@ def main():
                         help='Performing testing/validation process')
     parser.add_argument('--load-from', type=str,
                         help='Load the pre-trained weights')
-    parser.add_argument('--out-dir', type=str, default='./trained_models',
+    parser.add_argument('--out-dir', type=str, default='./trained_models/',
                         help='output directory to save the model')
     parser.add_argument('--per-layer-injection', type=str,
                         help='perform layer-wise injection on the specified layer')
@@ -95,7 +51,6 @@ def main():
     if args.train:
         print("|| Starting the training phase")
         print("|| DNN model to be trained:", args.net)
-        print("|| Dataset to be used:", dataset_class_map[args.net])
         print("|| Number of epochs:", args.epochs)
         if use_cuda: print("|| Training model on GPU\n")
         if not os.path.exists(args.out_dir):
@@ -104,7 +59,8 @@ def main():
             optimizer=optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
             for epoch in range(1, args.epochs + 1):
                 train(args.log_interval, model, device, train_set, optimizer, epoch)
-                test(model, device, val_set)
+                val(model, device, val_set)
+            test(model, device, test_set)
             torch.save(model.state_dict(), args.out_dir+"mnist_lenet5.pt")
 
 
@@ -114,7 +70,8 @@ def main():
             for epoch in range(1, args.epochs + 1):
                 scheduler.step()
                 train(args.log_interval, model, device, train_set, optimizer, epoch)
-                test(model, device, val_set)
+                val(model, device, val_set)
+            test(model, device, test_set)
             torch.save(model.state_dict(), args.out_dir+"cifar10_alexnet.pt")
 
         elif args.net=='googlenet':
@@ -123,18 +80,22 @@ def main():
             for epoch in range(1, args.epochs + 1):
                 scheduler.step()
                 train(args.log_interval,  model, device, train_set, optimizer, epoch)
-                test(model, device, val_set)
+                val(model, device, val_set)
+            test(model, device, test_set)
             torch.save(model.state_dict(), args.out_dir+"cifar100_googlenet.pt")
+
     if args.test:
         '''
             Doing image classification on the test dataset in clean case
         '''
+        print("|| Starting the evaluation on the test set")
+        print("|| DNN model to be evaluated:", args.net)
         model.load_state_dict(torch.load(weight_file, map_location='cpu'))
-        # if args.show_info:
         test(model, device, test_set)
+
     if args.per_layer_injection:
         '''
-            Perform fault injection to the specified layer
+            Perform fault injection to the specified layer with the specified fault rate (args.fault_rate)
         '''
         print("|| Performing layer-wise fault injection on the layer", args.per_layer_injection)
         model_params = torch.load(weight_file, map_location='cpu')
@@ -144,7 +105,7 @@ def main():
 
     if args.network_injection:
         '''
-            Perform fault injection across the whole network
+            Perform fault injection across the whole network with the specified fault rate (args.fault_rate)
         '''
         model_params = torch.load(weight_file, map_location='cpu')
         model_params_mutated = randNetwork(args, args.fault_rate, model_params, args.seed)
