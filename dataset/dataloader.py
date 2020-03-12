@@ -1,5 +1,4 @@
-# Returning the train set, validation set and test set of the MNIST, CIFAR10, CIFAR100 dataset
-# This is under test
+# Returning the train set and test set MNIST, CIFAR10, CIFAR100
 import torch
 from torchvision import datasets, transforms
 from torch import utils
@@ -17,29 +16,36 @@ def mnist_loader(args, train_batch_size, test_batch_size):
                              train=False,
                              download=True,
                              transform=transform)
+    num_train = len(train_set)
+    indices = list(range(num_train))
+    split = int(np.floor(args.split_fraction * num_train))
+    np.random.seed(args.seed)
+    np.random.shuffle(indices)
+    valid_indices, train_indices = indices[:split], indices[split:]
+    train_sampler= utils.data.sampler.SubsetRandomSampler(train_indices)
+    val_sampler = utils.data.sampler.SubsetRandomSampler(valid_indices)
+
     train_loader = utils.data.DataLoader(dataset=train_set,
-                                               batch_size=train_batch_size,
-                                               shuffle=True,
-                                               **kwargs)
+                                         batch_size=train_batch_size,
+                                         sampler=train_sampler,
+                                         **kwargs)
 
-    # val_loader =
+    val_loader = utils.data.DataLoader(dataset=train_set,
+                                     batch_size=train_batch_size,
+                                     sampler=val_sampler,
+                                     **kwargs)
+
     test_loader = utils.data.DataLoader(dataset=test_set,
-                                              batch_size=test_batch_size,
-                                              shuffle=True,
-                                              **kwargs)
-
-    return train_loader, test_loader
-    # return train_loader, val_loader, test_loader
+                                        batch_size=test_batch_size,
+                                        shuffle=False,
+                                        **kwargs)
+    return train_loader, val_loader, test_loader
 
 def cifar10_loader(args, train_batch_size, test_batch_size):
     kwargs = {'num_workers': 4, 'pin_memory': True}
     transform = transforms.Compose([transforms.ToTensor(),
                                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
     train_set = datasets.CIFAR10(root='./dataset',
-                                 train=True,
-                                 download=True,
-                                 transform=transform)
-    val_set = datasets.CIFAR10(root='./dataset',
                                  train=True,
                                  download=True,
                                  transform=transform)
@@ -50,22 +56,22 @@ def cifar10_loader(args, train_batch_size, test_batch_size):
     num_train = len(train_set)
     indices = list(range(num_train))
     split = int(np.floor(args.split_fraction * num_train))
-    print('xxxxxxxxxxxxxxxcheck', split)
     np.random.seed(args.seed)
     np.random.shuffle(indices)
-    train_sampler= utils.data.sampler.SubsetRandomSampler(indices[split:])
-    val_sampler = utils.data.sampler.SubsetRandomSampler(indices[:split])
+    valid_indices, train_indices = indices[:split], indices[split:]
+    train_sampler= utils.data.sampler.SubsetRandomSampler(train_indices)
+    val_sampler = utils.data.sampler.SubsetRandomSampler(valid_indices)
 
     train_loader = utils.data.DataLoader(dataset=train_set,
                                          batch_size=train_batch_size,
                                          sampler=train_sampler,
                                          **kwargs)
+
     val_loader = utils.data.DataLoader(dataset=train_set,
                                      batch_size=train_batch_size,
                                      sampler=val_sampler,
                                      **kwargs)
-    print(len(val_loader))
-    print(len(train_loader))
+
     test_loader = utils.data.DataLoader(dataset=test_set,
                                         batch_size=test_batch_size,
                                         shuffle=False,
@@ -91,13 +97,27 @@ def cifar100_loader(args, train_batch_size, test_batch_size):
                                              train=False,
                                              download=True,
                                              transform=test_transform)
+    num_train = len(train_set)
+    indices = list(range(num_train))
+    split = int(np.floor(args.split_fraction * num_train))
+    np.random.seed(args.seed)
+    np.random.shuffle(indices)
+    valid_indices, train_indices = indices[:split], indices[split:]
+    train_sampler= utils.data.sampler.SubsetRandomSampler(train_indices)
+    val_sampler = utils.data.sampler.SubsetRandomSampler(valid_indices)
+
     train_loader = utils.data.DataLoader(dataset=train_set,
-                                               batch_size=train_batch_size,
-                                               shuffle=True,
-                                               **kwargs)
+                                         batch_size=train_batch_size,
+                                         sampler=train_sampler,
+                                         **kwargs)
+
+    val_loader = utils.data.DataLoader(dataset=train_set,
+                                     batch_size=train_batch_size,
+                                     sampler=val_sampler,
+                                     **kwargs)
+
     test_loader = utils.data.DataLoader(dataset=test_set,
-                                              batch_size=test_batch_size,
-                                              shuffle=False,
-                                              **kwargs)
-    return train_loader, test_loader
-# return train_loader, val_loader, test_loader
+                                        batch_size=test_batch_size,
+                                        shuffle=False,
+                                        **kwargs)
+    return train_loader, val_loader, test_loader
